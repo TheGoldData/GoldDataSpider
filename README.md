@@ -2,7 +2,7 @@ GoldDataSpider
 ===============
 
 Introduction
----S
+---
 
 The Gold Data Spider is used for fetching pages and extracting data
 
@@ -17,10 +17,22 @@ It can support  the various types of documents for extracting data  from web pag
 Getting Started
 ---
 
-First we add the jar to the classpath.  
+First we add the jar to the project classpath.  
 
+1. maven:
+```maven
+<dependency>
+  <groupId>com.100shouhou.golddata</groupId>
+  <artifactId>golddata-spider</artifactId>
+  <version>1.1.1</version>
+</dependency>
+```
+2、gradle：
+```gradle
+ compile group: 'com.100shouhou.golddata', name: 'golddata-spider', version: '1.1.1'
+```
 
-then you can use the spider,for example:
+Then you can use the spider,for example:
 
 ```java
 @Test
@@ -47,10 +59,13 @@ public void testGoldSpider(){
             "        expr: p.tem>i                                      \n"+
             "      }                                                    \n"+
             "    }                                                      \n";
-    List list=com.xst.golddata.GoldSpider.newSpider()
+    GoldSpider spider= com.xst.golddata.GoldSpider.newSpider()
             .setUrl("http://www.weather.com.cn/weather/101020100.shtml")
             .setRule(ruleContent)
-            .request().extractList();
+            .request();
+    List list=spider.extractList();
+    // List<Weather> weathers=spider.extractList(Weather.class);
+    // Weather weathers=spider.extractFirst(Weather.class);
    list.forEach( System.out::println);
 }
 ``` 
