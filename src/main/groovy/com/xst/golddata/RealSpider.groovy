@@ -54,15 +54,17 @@ class RealSpider {
                 currentRequest.headers['Cookie'] = urlContent.cookie
             }
             logger.info("end request url: status->{}",urlContent.status)
-            if(new Integer(urlContent.status)>=400){
+            if(new Integer(urlContent.status)>=400 ||urlContent.content==null){
                 ctx.onRequestFail(currentRequest.url,urlContent);
+                ctx.finish(currentRequest.url,urlContent);
+                return ;
             }else{
                 ctx.onRequestResume(currentRequest.url,urlContent);
+                ctx.finish(currentRequest.url,urlContent);
             }
-            ctx.finish(currentRequest.url,urlContent);
         }catch (Exception e){
             logger.warn("error to get url:{}",currentRequest.url,e);
-            if(urlContent!=null && new Integer(urlContent.status)>=400){
+            if(urlContent==null || new Integer(urlContent.status)>=400){
                 ctx.onRequestFail(currentRequest.url,urlContent);
             }
             ctx.finish(currentRequest.url, urlContent);

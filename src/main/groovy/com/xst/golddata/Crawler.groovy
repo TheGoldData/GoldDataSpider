@@ -169,12 +169,16 @@ public class Crawler {
             retry()
         }catch (Exception e){
             if(e.getCause() instanceof  IOException && ret.status==200){
-               logger.warn("retry once by crawler")
-
+                logger.warn('retry once by crawler:{}',e.message)
+                try{
                     retry()
-
+                }catch (Exception e2){
+                    logger.warn(" retry failed again :{}",e2.message)
+                    return ret;
+                }
             }else{
-                throw e;
+                content=e.body;
+//                return ret;
             }
         }
         byte[] bytes=content;
@@ -193,6 +197,7 @@ public class Crawler {
             ret.content=bytes;
         }
 
+
         return ret;
 
     }
@@ -203,7 +208,7 @@ public class Crawler {
         return charDect.detect()?.getName()
     }
 
-    public static String guessCharset(InputStream is) throws IOException {
+    public static String guessCharsetByInputStream(InputStream is) throws IOException {
         return guessCharset(is.bytes);
     }
 
@@ -264,7 +269,7 @@ public class Crawler {
             eleList.add(doc);
         }
         String html= doc.outerHtml();
-        eleList.each {
+        eleList.eachWithIndex {it,eleIdx->
             Element ele=it;
             def item=[:]
             def subFields=fields.findAll ( {key,val->
@@ -298,6 +303,7 @@ public class Crawler {
                             headers: res.headers,
                             cookie:res.cookie,
                             status: res.status,
+                            eleIdx:eleIdx,
                             newUrl:{obj-> return new URL(obj)}
                     ]
 
@@ -328,6 +334,7 @@ public class Crawler {
                             headers: res.headers,
                             cookie:res.cookie,
                             status: res.status,
+                            eleIdx:eleIdx,
                             newUrl : { obj -> return new URL(obj) }
                     ]
 
@@ -369,6 +376,7 @@ public class Crawler {
                         headers: res.headers,
                         cookie:res.cookie,
                         status: res.status,
+                        eleIdx:eleIdx,
                         newUrl:{obj-> return new URL(obj)}
                 ]
 

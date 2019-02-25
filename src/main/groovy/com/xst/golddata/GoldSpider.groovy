@@ -81,20 +81,22 @@ import org.hjson.JsonValue
         return this.res.content;
     }
 
-    String getBodyAsString(){
-        String content=null
-        String charset=headers['__charset'];
-        if(!charset){
-            charset=new Crawler().guessCharset(res.bytes);
-        }
+     String getBodyAsString(){
+         String content=null
+         String charset=headers['__charset'];
+         if(res.bytes!=null){
+             if(!charset){
+                 charset=new Crawler().guessCharset(res.bytes);
+             }
 
-        if(charset!=null){
-            content=new String(res.bytes,charset);
-        }else{
-            content=new String(res.bytes,'gbk');
-        }
-        return content;
-    }
+             if(charset!=null){
+                 content=new String(res.bytes,charset);
+             }else{
+                 content=new String(res.bytes,'gbk');
+             }
+         }
+         return content;
+     }
 
     public  <T> T getBodyAsType(Class<T> type){
         return new ObjectMapper().readValue(getBodyAsString(),type)

@@ -20,6 +20,8 @@ import com.xst.golddata.utils.CookieUtils
 import com.xst.golddata.utils.Md5Utils
 
 import java.util.function.Function
+import java.util.function.Supplier
+
 /*
  * Created by wdg100 on 18/4/21
  */
@@ -34,9 +36,9 @@ class JSUtils {
         }
     }
 
-    static class CookieOp implements Function<Map,String>{
+    static class CookieOp implements Supplier<Cookie> {
         @Override
-        String apply(Map s) {
+        Cookie get() {
             return new Cookie()
         }
     }

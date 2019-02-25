@@ -203,9 +203,12 @@ class HttpConfig {
                     .setTcpNoDelay(false)
                     .build();
             builder.setDefaultSocketConfig(socketConfig)
-            requestBuilder.connectTimeout=10000
+            String connTimeout=System.getProperty('http.connectTimeout');
+            String socketTimeout=System.getProperty('http.socketTimeout');
 
-            requestBuilder.socketTimeout=10000
+            requestBuilder.connectTimeout=connTimeout?new Integer(connTimeout):10000
+
+            requestBuilder.socketTimeout=socketTimeout?new Integer(socketTimeout):10000
             requestBuilder.circularRedirectsAllowed=true
             builder.setRedirectStrategy(new PreservedRedirectStrategy())
             RequestConfig rc=requestBuilder.build();
