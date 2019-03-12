@@ -22,7 +22,6 @@ import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import groovyx.net.http.ApacheHttpBuilder
 import groovyx.net.http.HttpBuilder
-import org.apache.http.HttpEntityEnclosingRequest
 import org.apache.http.HttpException
 import org.apache.http.HttpHost
 import org.apache.http.HttpRequest
@@ -39,13 +38,10 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy
-import org.apache.http.cookie.CookieSpec
 import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager
-import org.apache.http.protocol.ExecutionContext
 import org.apache.http.protocol.HttpContext
 import org.apache.http.protocol.HttpCoreContext
-import org.apache.http.ssl.SSLContextBuilder
 import org.apache.http.ssl.SSLContexts
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -56,8 +52,8 @@ import javax.net.ssl.SSLSession
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 
-/*
- * Created by wdg100 on 18/4/21
+/**
+ * Created by wdg on 2018/8/2.
  */
 class HttpConfig {
     static Logger logger=LoggerFactory.getLogger(HttpConfig)
@@ -97,13 +93,13 @@ class HttpConfig {
         }
     }
     static     PoolingHttpClientConnectionManager connectionManager=           new PoolingHttpClientConnectionManager(
-                            RegistryBuilder.<ConnectionSocketFactory>create()
-                                    .register("http", new MyConnectionSocketFactory())
-                                    .register("https", sslConnectionSocketFactory) .build(),new FakeDnsResolver())
-     static     PoolingHttpClientConnectionManager defaultDnsConnectonManager=   new PoolingHttpClientConnectionManager(
-                    RegistryBuilder.<ConnectionSocketFactory>create()
-                            .register("http", new MyConnectionSocketFactory())
-                            .register("https",sslConnectionSocketFactory ) .build())
+            RegistryBuilder.<ConnectionSocketFactory>create()
+                    .register("http", new MyConnectionSocketFactory())
+                    .register("https", sslConnectionSocketFactory) .build(),new FakeDnsResolver())
+    static     PoolingHttpClientConnectionManager defaultDnsConnectonManager=   new PoolingHttpClientConnectionManager(
+            RegistryBuilder.<ConnectionSocketFactory>create()
+                    .register("http", new MyConnectionSocketFactory())
+                    .register("https",sslConnectionSocketFactory ) .build())
 
     static class FakeDnsResolver implements DnsResolver {
         @Override
@@ -142,20 +138,20 @@ class HttpConfig {
             return super.connectSocket(connectTimeout,socket,host,remoteAddress,localAddress,context);
         }
     }
+    static Closure noProxyClosure=null
     public  static HttpBuilder get(){
-        if(builder==null){
-
-            builder=ApacheHttpBuilder.configure {
+        if(!noProxyClosure){
+            noProxyClosure={
                 client.clientCustomizer( HttpConfig.createHttpConfig(null))
             }
-
         }
+        builder=ApacheHttpBuilder.configure (noProxyClosure)
         return  builder;
     }
 
-    static LoadingCache<String,HttpBuilder> cache=CacheBuilder.newBuilder().expireAfterWrite(3,TimeUnit.MINUTES).build(new CacheLoader<String, HttpBuilder>() {
+    static LoadingCache<String,Closure> cache=CacheBuilder.newBuilder().expireAfterWrite(3,TimeUnit.MINUTES).build(new CacheLoader<String, Closure>() {
         @Override
-        HttpBuilder load(String proxy) throws Exception {
+        Closure load(String proxy) throws Exception {
 
             def proxyType=null;
             def proxyHost=null;
@@ -176,20 +172,22 @@ class HttpConfig {
                 proxyHost=proxyUrl.host
                 proxyPort=proxyUrl.port
             }
-            ApacheHttpBuilder builder2=ApacheHttpBuilder.configure {
+
+            Closure c={
                 Integer intProxyPort=new Integer(proxyPort)
                 execution.proxy proxyHost, intProxyPort, proxyType, false
-//                ;
                 client.clientCustomizer( HttpConfig.createHttpConfig(execution.getProxyInfo().proxy))
-
             }
 
-            return builder2
+
+            return c;
         }
     })
 
     public  static HttpBuilder get(String key){
-       return cache.get(key)
+
+        ApacheHttpBuilder builder2=ApacheHttpBuilder.configure (cache.get(key))
+        return builder2
     }
 
     private static Consumer createHttpConfig(Proxy proxy){
@@ -236,6 +234,7 @@ class HttpConfig {
 
 
         };
+
         return aa
     }
     private static   HttpRequestRetryHandler retryHandler(){

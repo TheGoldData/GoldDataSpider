@@ -51,13 +51,12 @@ public class Crawler {
     def getContent(Map map=[:],Map incHeaders=[:],boolean encoding=true,String proxy='',String requestData=''){
         def ret=[status:500]
 
-        if('fake'.equals(incHeaders.__url)){//如果有__url参数表示该网站不是靠 url抓取的，url只是个数据代理。
+        if(map.url.startsWith('fake:')){//如果有__url参数表示该网站不是靠 url抓取的，url只是个数据代理。
             return [
                     status:200,
-                    content: ''
+                    content: 'fake'
             ]
         }
-
         def method=map.method?map.method:(incHeaders.__method?incHeaders.__method:'GET');
         if(requestData){//如果有请求内容，则也将请求方法设置为POST
             method='POST';
@@ -177,8 +176,11 @@ public class Crawler {
                     return ret;
                 }
             }else{
-                content=e.body;
-//                return ret;
+                try{
+                    content=e?.body;
+                }catch(Exception e3){
+                    logger.warn('error to get {},status:{},cause:{}',map.url,ret.stauts,e3.message)
+                }
             }
         }
         byte[] bytes=content;
