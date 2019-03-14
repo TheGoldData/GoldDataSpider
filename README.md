@@ -3,7 +3,7 @@ GoldDataSpider
 介绍
 ------
 
-金色数据采集器开源项目，是用于抓取网页和抽取数据的工具。其核心代码是从金色数数据平台分离而来。
+金色数据采集器开源项目，是用于抓取网页和抽取数据的工具。其核心代码是从金色数据采集与融合平台分离而来。
 
 
 该项目提供抓取和抽取来自网页数据，不仅可以抽取网页内的内容，还能抽取URL、HTTP报头、Cookie里的数据。
@@ -12,9 +12,9 @@ GoldDataSpider
 
 该项目还可支持从各种类型文档抽取数据，比如html/xml/json/javascript/text等。
 
-关于完全免费的金色数据社区版
+完全免费的金色数据社区版
 -----
-金色数据平台社区版是一款抓取完全不受限（比如私有云不限爬虫数量、抓取速度/时间、数据抓取数量、导出数据数量）的软件，
+金色数据平台社区版是一款抓取完全不受限（比如不限爬虫数量、抓取速度/时间、数据抓取数量、导出数据数量）的私有云软件，
 
 我们提供了详细的金色数据平台免费文档和培训视频，请点击<a href="https://golddata.100shouhou.com/front/docs" target="_blank">这里</a>查看和使用。
 
@@ -109,6 +109,8 @@ public class WeatherServiceImpl implements WeatherService{
 文档和培训视频
 -------------
 规则内容以及文档请点击<a href="https://golddata.100shouhou.com/front/docs" target="_blank">此处</a>查看
+
+你可以查看oschina的与金色数据相关博文， https://my.oschina.net/u/4095696?tab=newest
 
 
 许可证
