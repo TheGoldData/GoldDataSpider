@@ -12,12 +12,35 @@ GoldDataSpider
 
 该项目还可支持从各种类型文档抽取数据，比如html/xml/json/javascript/text等。
 
-完全免费的金色数据社区版
+完全免费的GoldData社区版
 -----
-金色数据平台社区版是一款抓取完全不受限（比如不限爬虫数量、抓取速度/时间、数据抓取数量、导出数据数量）的私有云软件，
+GoldData社区版是一款抓取完全不受限（比如不限爬虫数量、抓取速度/时间、数据抓取数量、导出数据数量）的私有云软件，
 
 我们提供了详细的金色数据平台免费文档和培训视频，请点击<a href="https://golddata.100shouhou.com/front/docs" target="_blank">这里</a>查看和使用。
 
+技术优势
+----
+
+**GoldData VS Scrapy**
+
+| |GoldData|Scrapy| 
+|---|----|---|
+|优势 | 1、规则简洁灵活易写，提供辅助可视化/源码编辑器 2、数据可反复采集而不产生重复数据  3、可同时将数据及数据关系抓取融入到数据库中|1、基于python脚本 2、第三方资料较多   3、国际化优势
+|劣势| 目前只提供mysql数据库对接| 规则与python脚本代码混合，难以维护
+
+**GoldData  VS spiderman/spiderman2**
+
+| |GoldData| spiderman/spiderman2|
+|---|----|---|
+|优势 | 1、规则简洁灵活易写，提供辅助可视化/源码编辑器  2、可反复采集数据而不产生重复  3、可同时将数据及数据关系抓取融入到数据库中| 
+|劣势| 目前只提供mysql数据库对接| 脚本庞大，难以维护
+
+**GoldData VS 其它商业采集器**
+
+| |GoldData|  其它商业采集器|
+|---|----|---|
+|优势 | 1、规则简洁灵活易写，提供辅助可视化/源码编辑器 2、可反复采集数据而不产生重复  3、可同时将数据及数据关系抓取融入到数据库中 4、提供完全免费不受限的数据采集功能| 1、提供“可视化”采集 |
+|劣势| 1、目前只提供mysql数据库对接 2、不提供"可视化"采集| 1、大多情况需写脚本，“可视化”很鸡肋 2、免费版通常限制采集数量、导出数量或者爬虫数量|
 
 使用入门
 ---------------
@@ -102,7 +125,7 @@ public class WeatherServiceImpl implements WeatherService{
 	}
 }
 ```
-另外，你可以免费使用可视化编辑器来编辑规则内容， 可视化编辑器来自金色数据平台，可以点击<a href="https://golddata.100shouhou.com/front/download" target="_blank">链接</a>下载，可视化编辑器截屏如下：
+另外，你可以免费使用可视化辅助编辑器来编辑规则内容， 可视化辅助编辑器来自金色数据平台，可以点击<a href="https://golddata.100shouhou.com/front/download" target="_blank">链接</a>下载，可视化编辑器截屏如下：
 
 ![可视化编辑器](images/visualEditor.jpg)
 
