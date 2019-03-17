@@ -18,6 +18,8 @@ GoldData社区版是一款抓取完全不受限（比如不限爬虫数量、抓
 
 我们提供了详细的金色数据平台免费文档和培训视频，请点击<a href="https://golddata.100shouhou.com/front/docs" target="_blank">这里</a>查看和使用。
 
+**添加QQ交流群：718556263。如果是在oschina或者github对本项目点赞将赠送一个月的专业版许可证。**
+
 技术优势
 ----
 
