@@ -55,12 +55,12 @@ GoldData社区版是一款抓取完全不受限（比如不限爬虫数量、抓
 <dependency>
   <groupId>com.100shouhou.golddata</groupId>
   <artifactId>golddata-spider</artifactId>
-  <version>1.1.3</version>
+  <version>1.1.4</version>
 </dependency>
 ```
 2、对于gradle项目
 ```groovy
- compile group: 'com.100shouhou.golddata', name: 'golddata-spider', version: '1.1.3'
+ compile group: 'com.100shouhou.golddata', name: 'golddata-spider', version: '1.1.4'
 ```
  
 然后你将可以使用该依赖所提供的简洁清晰的API，如下:
