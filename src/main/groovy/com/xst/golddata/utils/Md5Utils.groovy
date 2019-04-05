@@ -15,6 +15,7 @@
  */
 
 package com.xst.golddata.utils
+
 import javax.xml.bind.DatatypeConverter
 import java.security.MessageDigest
 

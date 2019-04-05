@@ -15,16 +15,18 @@
  */
 
 package com.xst.golddata.js
+
+import com.xst.golddata.utils.CookieUtils
 /*
  * Created by wdg100 on 18/4/21
  */
 class Cookie {
 
     String encode(Map m){
-        return com.xst.golddata.utils.CookieUtils.str(m)
+        return CookieUtils.str(m)
     }
 
     Map decode(String c){
-        return com.xst.golddata.utils.CookieUtils.map(c)
+        return CookieUtils.map(c)
     }
 }

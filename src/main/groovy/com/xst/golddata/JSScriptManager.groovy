@@ -12,25 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.xst.golddata
 
+
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory
-import com.xst.golddata.js.Dates
-import com.xst.golddata.js.JSUtils
-import com.xst.golddata.js.Soups
-import com.xst.golddata.js.URLs
 
 import javax.script.Bindings
 import javax.script.ScriptContext
 import javax.script.ScriptEngine
 
-/*
+/**
  * Created by wdg100 on 18/4/21
  */
 class JSScriptManager {
+
 
     private static SecureJSFilter secureJSFilter=new SecureJSFilter();
 
@@ -49,15 +46,16 @@ class JSScriptManager {
     public static ScriptEngine newEngine(){
         def engine= jsfactory.getScriptEngine(secureJSFilter);
         Bindings bindings=engine.createBindings();
-        bindings.put('formatDate',new Dates.FormatDate() )
-        bindings.put('parseDate',new Dates.ParseDate())
-        bindings.put('url',new URLs.ToUrl())
-        bindings.put('md5',new JSUtils.ToMd5())
+        bindings.put('formatDate',new com.xst.golddata.js.Dates.FormatDate() )
+        bindings.put('parseDate',new com.xst.golddata.js.Dates.ParseDate())
+        bindings.put('url',new com.xst.golddata.js.URLs.ToUrl())
+        bindings.put('md5',new com.xst.golddata.js.JSUtils.ToMd5())
+        bindings.put('LOG',new com.xst.golddata.js.LogUtils.LogFunc())
 
-        bindings.put('$',new Soups.newSoup())
-        bindings.put('$ajax',new URLs.ajax());
-        bindings.put('$ajax2',new URLs.ajax2());
-        bindings.put('$cookie',new JSUtils.CookieOp())
+        bindings.put('$',new com.xst.golddata.js.Soups.newSoup())
+        bindings.put('$ajax',new com.xst.golddata.js.URLs.ajax());
+        bindings.put('$ajax2',new com.xst.golddata.js.URLs.ajax2());
+        bindings.put('$cookie',new com.xst.golddata.js.JSUtils.CookieOp())
 
         //缩短写法
         bindings.put('Map',engine.eval('Java.type("java.util.HashMap")'));

@@ -16,8 +16,6 @@
 
 package com.xst.golddata.js
 
-import com.xst.golddata.utils.CookieUtils
-import com.xst.golddata.utils.Md5Utils
 
 import java.util.function.Function
 import java.util.function.Supplier
@@ -32,7 +30,7 @@ class JSUtils {
 
         @Override
         String apply(String s) {
-            return  Md5Utils.md5(s);
+            return  com.xst.golddata.utils.Md5Utils.md5(s);
         }
     }
 

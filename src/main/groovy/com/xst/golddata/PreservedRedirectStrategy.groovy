@@ -19,7 +19,7 @@ package com.xst.golddata
 import org.apache.http.ProtocolException
 import org.apache.http.impl.client.DefaultRedirectStrategy
 
-/*
+/**
  * Created by wdg100 on 18/4/21
  */
 class PreservedRedirectStrategy extends DefaultRedirectStrategy{

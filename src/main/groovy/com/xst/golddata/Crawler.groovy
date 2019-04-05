@@ -12,14 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.xst.golddata
 
 
 import com.ibm.icu.text.CharsetDetector
-import com.xst.golddata.utils.URIUtils
 import groovyx.net.http.HttpBuilder
 import groovyx.net.http.util.IoUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -28,22 +26,19 @@ import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import com.xst.golddata.utils.CookieUtils
 
 import javax.script.SimpleBindings
-/*
- * Created by wdg100 on 18/4/21
+
+/**
+ * Created by weidaogang on 18/4/23.
+ *
  */
-public class Crawler {
+public  class Crawler {
 
-   static Logger logger = LoggerFactory.getLogger(Crawler)
+    Logger logger = LoggerFactory.getLogger(Crawler)
 
-    static {
-        logger.info('文档参考: https://golddata.100shouhou.com/front/docs')
-    }
 
     public Crawler() {
-
 
     }
 
@@ -51,12 +46,13 @@ public class Crawler {
     def getContent(Map map=[:],Map incHeaders=[:],boolean encoding=true,String proxy='',String requestData=''){
         def ret=[status:500]
 
-        if(map.url.startsWith('fake:')){//如果有__url参数表示该网站不是靠 url抓取的，url只是个数据代理。
+        if(map.url.startsWith('fake:')){
             return [
                     status:200,
-                    content: 'fake'
+                    content: ''
             ]
         }
+
         def method=map.method?map.method:(incHeaders.__method?incHeaders.__method:'GET');
         if(requestData){//如果有请求内容，则也将请求方法设置为POST
             method='POST';
@@ -74,6 +70,8 @@ public class Crawler {
                 }
             }
 
+
+//
         }
 
         if(!"GET".equalsIgnoreCase(method) && !contentType) {
@@ -83,6 +81,7 @@ public class Crawler {
         String siteProxy=incHeaders['__proxy'];
         if(siteProxy){
             proxy=siteProxy
+
         }
 
         def defaultHeaders=[
@@ -98,7 +97,7 @@ public class Crawler {
         String headerCookieStr=incHeaders['Cookie'];
         def closeable={
 
-            request.uri = URIUtils.encodeURL(map.url)
+            request.uri = com.xst.golddata.utils.URIUtils.encodeURL(map.url)
 
             if(contentType!=null && !''.equalsIgnoreCase(contentType)){
                 request.contentType = contentType
@@ -126,13 +125,13 @@ public class Crawler {
                 if(resp.cookies.size()>0){
                     def cookieMap2=[:]
                     if(headerCookieStr!=null){
-                        cookieMap2.putAll(CookieUtils.map(headerCookieStr));
+                        cookieMap2.putAll(com.xst.golddata.utils.CookieUtils.map(headerCookieStr));
                     }
                     resp.cookies.each { cookie->
                         cookieMap2[cookie.name]=cookie.value;
                     }
 
-                    ret.cookie = CookieUtils.str(cookieMap2);
+                    ret.cookie = com.xst.golddata.utils.CookieUtils.str(cookieMap2);
                 }
 
                 return IoUtils.streamToBytes(resp.inputStream);
@@ -168,7 +167,7 @@ public class Crawler {
             retry()
         }catch (Exception e){
             if(e.getCause() instanceof  IOException && ret.status==200){
-                logger.warn('retry once by crawler:{}',e.message)
+               logger.warn('retry once by crawler:{}',e.message)
                 try{
                     retry()
                 }catch (Exception e2){
@@ -181,6 +180,8 @@ public class Crawler {
                 }catch(Exception e3){
                     logger.warn('error to get {},status:{},cause:{}',map.url,ret.stauts,e3.message)
                 }
+
+//                return ret;
             }
         }
         byte[] bytes=content;
@@ -198,7 +199,6 @@ public class Crawler {
         }else{
             ret.content=bytes;
         }
-
 
         return ret;
 
@@ -220,7 +220,7 @@ public class Crawler {
         if('js'.equals(fields.'__node')){
            doc= [content:res.content,baseUri: baseUri] ;
         }else{
-            doc=Jsoup.parse(res.content,baseUri);
+            doc=Jsoup.parse((String)res.content,baseUri);
         }
         def ret=[];
         List<Element> eleList=[];
@@ -407,6 +407,33 @@ public class Crawler {
             }
         }
         return ret;
+    }
+
+    def getAccessPath(Map valuesOfFields,Map fields,String key){
+        def val=fields[key]
+        String accessPath = valuesOfFields[key];
+        if(val.down && val.down!=0){
+
+            String oldUrl = valuesOfFields[key]
+            if (val.accessPathJs) {
+                Map condition = [
+                        item  : valuesOfFields,
+                        source:valuesOfFields[key],
+                ]
+                SimpleBindings simple = new SimpleBindings(condition)
+                try {
+                    accessPath = (String) JSScriptManager.newSingleEngine().eval(val.accessPathJs.trim(), simple)
+                } catch (Exception e) {
+                    String cause = ExceptionUtils.getRootCauseMessage(e);
+                    logger.warn("error exec js:{},cause:{}", val.accessPathJs.trim(), cause)
+                }
+            }
+            if(!accessPath){
+                accessPath=new URL(oldUrl).path
+            }
+
+        }
+        return accessPath;
     }
 
 

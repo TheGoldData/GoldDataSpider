@@ -16,13 +16,12 @@
 
 package com.xst.golddata
 
-/*
+/**
  * Created by wdg100 on 18/4/21
  */
 public class SpiderRequest {
 
     String ruleId
-
     String url;
 
     Integer depth;
@@ -34,7 +33,7 @@ public class SpiderRequest {
     public Map asMap(){
         def ret=[:]
         ret.putAll(this.properties);
-        ret.remove("params");
+        ret.remove('params');
         ret.putAll(params)
         return ret;
     }

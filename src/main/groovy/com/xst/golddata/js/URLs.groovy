@@ -16,8 +16,8 @@
 
 package com.xst.golddata.js
 
+
 import com.xst.golddata.Crawler
-import com.xst.golddata.GoldSpider
 
 import java.util.function.BiFunction
 import java.util.function.Function
@@ -45,13 +45,17 @@ class URLs {
             if(map.method){
                method=map.method
             }
-            return new Crawler().getContent([url:url,method: method],map.headers?:[:],map.encoding?:true,map.proxy?:'',map.data?:'')
+            boolean encoding=true;
+            if(map.get('encoding')!=null){
+                encoding=Boolean.parseBoolean(map.get('encoding').toString());
+            }
+            return new Crawler().getContent([url:url,method: method],map.headers?:[:],encoding,map.proxy?:'',map.data?:'')
         }
     }
-    static class ajax2 implements Function<String,GoldSpider>{
+    static class ajax2 implements Function<String,com.xst.golddata.GoldSpider>{
         @Override
-        public GoldSpider apply(String url){
-            return GoldSpider.newSpider().setUrl(url)
+        public com.xst.golddata.GoldSpider apply(String url){
+            return com.xst.golddata.GoldSpider.newSpider().setUrl(url)
         }
     }
 

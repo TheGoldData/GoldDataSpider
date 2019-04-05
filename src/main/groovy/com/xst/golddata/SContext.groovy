@@ -16,22 +16,20 @@
 
 package com.xst.golddata
 
-/*
+/**
  * Created by wdg100 on 18/4/21
  */
 public interface SContext {
 
     void init();
-
     def saveModels(List list)
-
     void saveModel(String url,int depth,Map ret,Map fields);
 
     boolean exists(String url);
 
     void addHref(SpiderRequest request);
 
-    public void finish(String url,Map ret);
+    def finish(String url,Map ret);
 
 
     public List getUrlDefs();

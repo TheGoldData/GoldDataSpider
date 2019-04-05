@@ -18,7 +18,7 @@ package com.xst.golddata
 
 import jdk.nashorn.api.scripting.ClassFilter
 
-/*
+/**
  * Created by wdg100 on 18/4/21
  */
 class SecureJSFilter implements ClassFilter{

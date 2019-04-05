@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.xst.golddata
@@ -93,13 +92,13 @@ class HttpConfig {
         }
     }
     static     PoolingHttpClientConnectionManager connectionManager=           new PoolingHttpClientConnectionManager(
-            RegistryBuilder.<ConnectionSocketFactory>create()
-                    .register("http", new MyConnectionSocketFactory())
-                    .register("https", sslConnectionSocketFactory) .build(),new FakeDnsResolver())
-    static     PoolingHttpClientConnectionManager defaultDnsConnectonManager=   new PoolingHttpClientConnectionManager(
-            RegistryBuilder.<ConnectionSocketFactory>create()
-                    .register("http", new MyConnectionSocketFactory())
-                    .register("https",sslConnectionSocketFactory ) .build())
+                            RegistryBuilder.<ConnectionSocketFactory>create()
+                                    .register("http", new MyConnectionSocketFactory())
+                                    .register("https", sslConnectionSocketFactory) .build(),new FakeDnsResolver())
+     static     PoolingHttpClientConnectionManager defaultDnsConnectonManager=   new PoolingHttpClientConnectionManager(
+                    RegistryBuilder.<ConnectionSocketFactory>create()
+                            .register("http", new MyConnectionSocketFactory())
+                            .register("https",sslConnectionSocketFactory ) .build())
 
     static class FakeDnsResolver implements DnsResolver {
         @Override
@@ -142,7 +141,7 @@ class HttpConfig {
     public  static HttpBuilder get(){
         if(!noProxyClosure){
             noProxyClosure={
-                client.clientCustomizer( HttpConfig.createHttpConfig(null))
+               client.clientCustomizer( HttpConfig.createHttpConfig(null))
             }
         }
         builder=ApacheHttpBuilder.configure (noProxyClosure)
@@ -187,7 +186,7 @@ class HttpConfig {
     public  static HttpBuilder get(String key){
 
         ApacheHttpBuilder builder2=ApacheHttpBuilder.configure (cache.get(key))
-        return builder2
+       return builder2
     }
 
     private static Consumer createHttpConfig(Proxy proxy){
@@ -284,12 +283,7 @@ class HttpConfig {
 
                     return true;
                 }
-//                boolean idempotent = !(request instanceof HttpEntityEnclosingRequest);
-//                if (idempotent)
-//                {
-//                    // Retry if the request is considered idempotent
-//                    return true;
-//                }
+
                 return true;
             }
 

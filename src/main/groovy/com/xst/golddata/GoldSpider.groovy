@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.xst.golddata
@@ -22,9 +21,7 @@ import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.json.JsonOutput
 import org.hjson.JsonValue
-/*
- * Created by wdg100 on 18/4/21
- */
+
  class GoldSpider {
     String method='GET'
     String url
@@ -37,66 +34,67 @@ import org.hjson.JsonValue
         return new GoldSpider();
     }
 
-     public GoldSpider setUrl(String url){
+    def setUrl(String url){
         this.url=url
         return this;
     }
-     public GoldSpider setMethod(String method){
+    def setMethod(String method){
         this.method=method;
         return this;
     }
-     public GoldSpider setProxy(String proxy){
+    def setProxy(String proxy){
         this.proxy=proxy
         return this
     }
 
-     public GoldSpider setRule(String rule){
+    def setRule(String rule){
         this.rule=rule;
         return this;
     }
 
-     public GoldSpider setData(String data){
+    def setData(String data){
         this.data=data;
         return this;
     }
 
-     public GoldSpider setHeaders(Map headers){
+    def setHeaders(Map headers){
         headers.putAll(headers)
         return this
     }
 
-     public GoldSpider addHeader(String key,String val){
+    def addHeader(String key,String val){
         headers.put(key,val)
         return this;
     }
 
-     public GoldSpider request(){
+    def request(){
         def res=new Crawler().getContent([url:url,method: method],headers,false,proxy,data);
         res.bytes=res.content
         this.res=res;
         return this;
     }
 
-    byte[] getBodyAsBytes(){
-        return this.res.content;
+    def getBodyAsBytes(){
+        return this.res.bytes;
     }
 
-     String getBodyAsString(){
-         String content=null
-         String charset=headers['__charset'];
-         if(res.bytes!=null){
-             if(!charset){
-                 charset=new Crawler().guessCharset(res.bytes);
-             }
+    String getBodyAsString(){
+        String content=null
+        String charset=headers['__charset'];
+        if(res.bytes!=null){
+            if(!charset){
+                charset=new Crawler().guessCharset(res.bytes);
+            }
 
-             if(charset!=null){
-                 content=new String(res.bytes,charset);
-             }else{
-                 content=new String(res.bytes,'gbk');
-             }
-         }
-         return content;
-     }
+            if(charset!=null){
+                content=new String(res.bytes,charset);
+            }else{
+                content=new String(res.bytes,'gbk');
+            }
+        }
+
+        return content;
+    }
 
     public  <T> T getBodyAsType(Class<T> type){
         return new ObjectMapper().readValue(getBodyAsString(),type)
@@ -138,7 +136,7 @@ import org.hjson.JsonValue
 
 
 
-    Map parseRule(){
+    def parseRule(){
         String content=rule;
         def rule= JsonValue.readHjson(content).toString();
         rule=new ObjectMapper().readValue(rule,Map.class);

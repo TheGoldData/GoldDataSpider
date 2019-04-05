@@ -40,7 +40,6 @@ class URIUtils {
         }
         return query_pairs;
     }
-
     public static String encodeURL(String url){
         int idx=url.indexOf('?');
         if(idx>-1){

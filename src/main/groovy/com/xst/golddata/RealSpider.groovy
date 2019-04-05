@@ -19,7 +19,7 @@ package com.xst.golddata
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-/*
+/**
  * Created by wdg100 on 18/4/21
  */
 class RealSpider {
@@ -60,7 +60,10 @@ class RealSpider {
                 return ;
             }else{
                 ctx.onRequestResume(currentRequest.url,urlContent);
-                ctx.finish(currentRequest.url,urlContent);
+                boolean needParse=ctx.finish(currentRequest.url,urlContent);
+                if(!needParse){
+                    return;
+                }
             }
         }catch (Exception e){
             logger.warn("error to get url:{}",currentRequest.url,e);
